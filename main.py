@@ -1,25 +1,29 @@
-from lyrics_utils import Lyrics_Utils
-from gen_Spotify import SpotifyData
-import time
+from scripts_python.lyrics_utils import Lyrics_Utils
+from scripts_python.gen_Spotify import SpotifyData
+from scripts_python.lyrics_analysis_1 import Lyrics_Analysis_1
+from scripts_python.graphs import Graph
+
+
+
+
 
 def main():
     spotify_data = SpotifyData()
+    lyrics_analysis = Lyrics_Analysis_1()
+    lyrics_utils = Lyrics_Utils()
+    graph = Graph(spotify_data)
 
     if spotify_data.sp:
         spotify_data.get_user_data()
         spotify_data.load_spotify_favorite_songs()
 
-        print("On commence les paroles")
-        start_time = time.time()
+        # initialize_lyrics(spotify_data)
+        graph.draw_lyrics_from_one_singer(lyrics_analysis, lyrics_utils)
+        # draw_lyrics_from_one_song(spotify_data, True)
+        # print_sentiment_from_one_song(spotify_data)
 
-        lyrics_analysis = Lyrics_Utils(spotify_data)
-        lyrics_list = lyrics_analysis.get_all_lyrics_favorite()
-        lyrics_analysis.save_lyrics_to_file(lyrics_list)
 
-        end_time = time.time() - start_time
-        execution_time = end_time - start_time
 
-        print(f"Les paroles de vos chansons favorites ont été téléchargées et sauvegardées. Temps écoulé : {execution_time:.2f} secondes.")
 
 
 
