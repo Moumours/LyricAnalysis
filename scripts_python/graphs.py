@@ -56,11 +56,9 @@ class Graph:
         plt.tight_layout()
         plt.show()
 
-
-
     ## Public methods
 
-    def draw_lyrics_from_one_singer(self, artist_name, clean_mode = True):
+    def draw_lyrics_from_one_singer(self, artist_name, clean_mode=True):
         singer_lyrics = self.lyrics_utils.load_lyrics_from_one_singer(artist_name)
         singer_sentiment = self.lyrics_analysis.get_singer_sentiment(singer_lyrics)
 
@@ -69,7 +67,6 @@ class Graph:
 
     def draw_lyrics_from_one_song(self, artist_name, song_name, clean_mode=True):
         song_lyrics = self.lyrics_utils.load_lyrics_from_one_song(artist_name, song_name)
-
         sentiment_list = self.lyrics_analysis.get_lyrics_sentiment_song(song_lyrics[2])
 
         self.draw_sentiment_song(sentiment_list, clean_mode)
@@ -77,5 +74,33 @@ class Graph:
     def print_sentiment_from_one_song(self, artist_name, song_name):
         song_lyrics = self.lyrics_utils.load_lyrics_from_one_song(artist_name, song_name)
 
-        sentiment_list = self.lyrics_analysis.get_lyrics_sentiment_song(song_lyrics[2], True)
+        self.lyrics_analysis.get_lyrics_sentiment_song(song_lyrics[2], True)
 
+    def plot_sentiment_scores(self, singers_names):
+        fig, ax = plt.subplots(figsize=(12, 8))
+
+        if singers_names[0].lower() == "all":
+            singers_names = self.lyrics_utils.get_all_artists_name()
+
+        for singer_name in singers_names:
+            singer_lyrics = self.lyrics_utils.load_lyrics_from_one_singer(singer_name)
+            singer_emotion = self.lyrics_analysis.get_singer_sentiment(singer_lyrics)
+            singer_data = self.lyrics_analysis.get_mean_sentiment_singer(singer_emotion, True)
+
+            singer_score = [item[0] for item in singer_data]
+            singer_songs = [item[1] for item in singer_data]
+            singer_pourcentage = [item[2] for item in singer_data]
+
+            ax.scatter(singer_score, singer_pourcentage, label=singer_name, marker='o', s=200)
+
+            for i, song in enumerate(singer_songs):
+                if i < len(singer_songs):
+                    ax.text(singer_score[i], singer_pourcentage[i], song, ha='center', va='bottom', fontsize=8)
+
+        ax.set_xlabel('Sentiment Score')
+        ax.set_ylabel('Pourcentage de phrases gardées')
+        ax.set_title('Sentiment Scores of Songs by Various Singers')
+
+        ax.legend()
+        plt.tight_layout()
+        plt.show()

@@ -2,10 +2,6 @@ import os
 from dotenv import load_dotenv
 import json
 import time
-import matplotlib.pyplot as plt
-import math
-import numpy as np
-from textblob import TextBlob
 import lyricsgenius
 
 class Lyrics_Utils:
@@ -16,12 +12,17 @@ class Lyrics_Utils:
         self.client_secret = os.getenv("GENIUS_CLIENT_SECRET")
         self.client_access_token = os.getenv("GENIUS_CLIENT_ACCESS_TOKEN")
 
-    def getAllSongsName(self, artist_name):
+    def get_all_songs_name(self, artist_name):
         songs_by_artist = []
         for song in self.spotify_data.user_data['favorite_songs']:
             if song[1] == artist_name:
                 songs_by_artist.append(song[0])
         return songs_by_artist
+
+    def get_all_artists_name(self):
+        data = self.spotify_data.user_data['favorite_songs']
+        artists = list({song[1] for song in data})
+        return artists
 
     def get_lyrics_one_singer(self, songs, singer):
         genius = lyricsgenius.Genius(self.client_access_token)

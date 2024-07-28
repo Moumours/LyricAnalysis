@@ -19,8 +19,7 @@ class Lyrics_Analysis_1:
         for sentence in blob.sentences:
             if printable:
                 print(sentence.raw, sentence.sentiment.polarity, sentence.sentiment.subjectivity)
-            sentiment_list.append(
-                sentence.sentiment.polarity * sentence.sentiment.subjectivity)  # Here we have a product of polarity and subjectivity
+            sentiment_list.append(sentence.sentiment.polarity * sentence.sentiment.subjectivity)  # Here we have a product of polarity and subjectivity
 
         return sentiment_list
 
